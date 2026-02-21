@@ -5,15 +5,16 @@ import Features from "../components/home/Features";
 import Testimonial from "../components/home/Testimonial";
 import CallToAction from "../components/home/CallToAction";
 import Footer from "../components/home/Footer";
+
 const Home = () => {
   return (
     <>
-      <Banner></Banner>
-      <Hero></Hero>
-      <Features></Features>
+      <Banner />
+      <Hero />
+      <Features />
       <Testimonial />
-      <CallToAction></CallToAction>
-      <Footer></Footer>
+      <CallToAction />
+      <Footer />
     </>
   );
 };

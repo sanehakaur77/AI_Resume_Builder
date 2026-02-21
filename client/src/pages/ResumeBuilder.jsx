@@ -4,6 +4,9 @@ import PersonalInfoForm from "../components/home/PersonalInfoForm";
 import ResumePreview from "../components/home/ResumePreview";
 import { dummyResumeData } from "../assets/assets";
 import TemplateSelector from "../components/home/TemplateSelector";
+import ColorPicker from "../components/home/ColorPicker";
+import ProfessionalSummaryForm from "../components/ProfessionalSummaryForm";
+import ExperienceForm from "../components/ExperienceForm";
 import {
   User,
   FileText,
@@ -79,7 +82,8 @@ const ResumeBuilder = () => {
       <div className="max-w-7xl mx-auto px-4 pb-8">
         <div className="grid lg:grid-cols-12 gap-8">
           {/* Left Panel – Form */}
-          <div className="relative lg:col-span-5 rounded-lg overflow-hidden">
+          {/* ✅ Removed overflow-hidden ONLY */}
+          <div className="relative lg:col-span-5 rounded-lg">
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 pt-1 relative">
               {/* Progress bar */}
               <div className="absolute top-0 left-0 right-0 h-1 bg-gray-200"></div>
@@ -90,12 +94,22 @@ const ResumeBuilder = () => {
                   width: `${(activeSectionIndex / (sections.length - 1)) * 100}%`,
                 }}
               ></div>
+
               {/* Section Navigation */}
               <div className="flex justify-between items-center mb-6 border-b border-gray-300 py-1">
                 <TemplateSelector
                   selectedTemplate={resumeData.template}
                   onChange={(template) =>
                     setResumeData((prev) => ({ ...prev, template }))
+                  }
+                />
+                <ColorPicker
+                  selectedColor={resumeData.accent_color}
+                  onChange={(color) =>
+                    setResumeData((prev) => ({
+                      ...prev,
+                      accent_color: color,
+                    }))
                   }
                 />
               </div>
@@ -115,6 +129,7 @@ const ResumeBuilder = () => {
                     Previous
                   </button>
                 )}
+
                 <button
                   onClick={() =>
                     setActiveSectionIndex((prevIndex) =>
@@ -122,16 +137,18 @@ const ResumeBuilder = () => {
                     )
                   }
                   className={`flex items-center gap-1 p-3 rounded-lg text-sm font-medium
-    text-gray-600 hover:bg-gray-50 transition-all ml-auto
-    ${activeSectionIndex === sections.length - 1 && "opacity-50"}`}
+                    text-gray-600 hover:bg-gray-50 transition-all ml-auto
+                    ${
+                      activeSectionIndex === sections.length - 1 && "opacity-50"
+                    }`}
                   disabled={activeSectionIndex === sections.length - 1}
                 >
                   Next <ChevronRight className="size-4" />
                 </button>
               </div>
+
               {/* Form Content */}
               <div className="space-y-6">
-                {/* Form Content */}
                 <div className="space-y-6">
                   {activeSection.id === "personal" && (
                     <PersonalInfoForm
@@ -146,6 +163,28 @@ const ResumeBuilder = () => {
                       setRemoveBackground={setRemoveBackground}
                     />
                   )}
+
+                  {activeSection.id === "summary" && (
+                    <ProfessionalSummaryForm
+                      data={resumeData.professional_summary}
+                      onChange={(data) =>
+                        setResumeData((prev) => ({
+                          ...prev,
+                          professional_summary: data,
+                        }))
+                      }
+                      setResumeData={setResumeData}
+                    />
+                  )}
+
+                  {activeSection.id === "experience" && (
+                    <ExperienceForm
+                      data={resumeData.experience}
+                      onChange={(data) =>
+                        setResumeData((prev) => ({ ...prev, experience: data }))
+                      }
+                    />
+                  )}
                 </div>
               </div>
             </div>
@@ -153,8 +192,6 @@ const ResumeBuilder = () => {
 
           {/* Right Panel – Preview */}
           <div className="lg:col-span-7 max-lg:mt-6">
-            <div>{/* --- buttons --- */}</div>
-
             <ResumePreview
               data={resumeData}
               template={resumeData.template}
